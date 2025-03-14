@@ -241,13 +241,14 @@ class HomeView extends StackedView<HomeViewModel> {
                                                           .dueDate !=
                                                       null) ...[
                                                     Text(
-                                                      "Due: ${DateFormat("MMMM,dd yyyy").format(viewModel.tasks[index].dueDate!)}",
+                                                      "Due: ${viewModel.formattedDueDateAndDueTime(index)}",
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .titleSmall!
                                                           .copyWith(
-                                                              color:
-                                                                  kcLightGrey),
+                                                            color: kcLightGrey,
+                                                            fontSize: 14,
+                                                          ),
                                                     ),
                                                   ],
                                                 ],

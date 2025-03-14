@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:task_synced/app/app.locator.dart';
 import 'package:task_synced/models/task.dart';
@@ -56,6 +58,27 @@ class HomeViewModel extends StreamViewModel {
 
     setBusy(false);
     notifyListeners();
+  }
+
+  TimeOfDay? stringToTimeOfDay(String? time) {
+    if (time == null) return null;
+
+    final parts = time.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
+
+  String formattedDueDateAndDueTime(index) {
+    TimeOfDay? time = stringToTimeOfDay(tasks[index].dueTime);
+
+    DateTime dueDateTime = DateTime(
+      tasks[index].dueDate!.year,
+      tasks[index].dueDate!.month,
+      tasks[index].dueDate!.day,
+      time?.hour ?? 0,
+      time?.minute ?? 0,
+    );
+
+    return DateFormat("MMMM dd, yyyy hh:mm a").format(dueDateTime);
   }
 
   Future<void> deleteAndFetchTasks(String taskId) async {

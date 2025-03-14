@@ -118,7 +118,7 @@ class AddTaskView extends StackedView<AddTaskViewModel> {
                           child: ListTile(
                             title: Text(
                               viewModel.dueTime != null
-                                  ? "${viewModel.dueTime!.hour}:${viewModel.dueTime!.minute}"
+                                  ? "${viewModel.dueTime!.hour.toString().padLeft(2, '0')}:${viewModel.dueTime!.minute.toString().padLeft(2, '0')}"
                                   : 'Not Set',
                               style: Theme.of(context)
                                   .textTheme

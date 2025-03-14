@@ -46,18 +46,20 @@ class UpdateTaskViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  String timeOfDayToString(TimeOfDay time) {
+  String? timeOfDayToString(TimeOfDay? time) {
+    if (time == null) return null;
     return '${time.hour}:${time.minute}';
   }
 
-  TimeOfDay stringToTimeOfDay(String time) {
+  TimeOfDay? stringToTimeOfDay(String? time) {
+    if (time == null) return null;
+
     final parts = time.split(':');
     return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
   }
 
   void submitForm(String taskId) {
     if (formKey.currentState!.validate()) {
-      String time = timeOfDayToString(dueTime!);
       // create a task object
       Task task = Task(
         id: int.parse(taskId),
@@ -65,7 +67,7 @@ class UpdateTaskViewModel extends BaseViewModel {
         priority: selectedPriority!,
         title: titleController.text.trim(),
         dueDate: formattedDueDate(dueDate),
-        dueTime: time,
+        dueTime: timeOfDayToString(dueTime),
       );
 
       //submit that task object to the addtask function which will inturn send it to the add Task api service
@@ -74,7 +76,7 @@ class UpdateTaskViewModel extends BaseViewModel {
   }
 
   Future<void> updateTask(String taskId, Task newTasks) async {
-    TimeOfDay time = stringToTimeOfDay(newTasks.dueTime!);
+    TimeOfDay? time = stringToTimeOfDay(newTasks.dueTime);
     setBusy(true);
     await _apiService.updateTaskById(taskId, newTasks);
     _navigationService.replaceWithHomeView();
@@ -83,8 +85,8 @@ class UpdateTaskViewModel extends BaseViewModel {
       newTasks.dueDate!.year,
       newTasks.dueDate!.month,
       newTasks.dueDate!.day,
-      time.hour,
-      time.minute,
+      time?.hour ?? 0,
+      time?.minute ?? 0,
     );
 
     //once you edit a task then set a scheduled reminder for the due date
